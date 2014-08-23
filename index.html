@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title></title>
 
-    <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+    <script src="client/jquery/jquery-2.1.1.js"></script>
 
     <script src="client/js/strategypy.js"></script>
+    <script src="client/js/Player.js"></script>
     <script src="client/js/Cell.js"></script>
     <script src="client/js/Grid.js"></script>
     <script src="client/js/Game.js"></script>
@@ -14,5 +15,11 @@
 </head>
 <body>
     <canvas id="strategypy" width="400" height="400"></canvas>
+    <div>
+        <button class="start-btn">Play</button>
+        <button class="start-btn" data-fps="15">15 FPS</button>
+        <button class="start-btn" data-fps="24">24 FPS</button>
+        <button class="start-btn" data-fps="30">30 FPS</button>
+    </div>
 </body>
 </html>

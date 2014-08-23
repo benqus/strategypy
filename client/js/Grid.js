@@ -13,41 +13,42 @@
 
     $.extend(Grid.prototype, {
 
-        createCell: function () {
-            var cell = new Cell(this.currentX, this.currentY);
+        createCell: function (column, row) {
+            var cell = new Cell(column, row, this.currentX, this.currentY);
             this.cells[cell.getID()] = cell;
             return cell;
         },
 
         newColumn: function () {
-            this.currentX += Cell.WIDTH;
+            this.currentX += Cell.getWidth();
         },
 
         newRow: function () {
             this.currentX = 0;
-            this.currentY += Cell.HEIGHT;
+            this.currentY += Cell.getHeight();
         },
 
-        render: function (ctx) {
+        update: function (ctx, frame, players) {
+            for (var i in this.cells) {
+                this.cells[i].render(ctx, frame, players);
+            }
+        },
+
+        render: function (ctx, frame, players) {
             var row = 0,
                 column = 0,
                 cell;
 
-            var hasPlayer = true; // temporary
-
             while (row < this.rows) {
                 while (column < this.columns) {
-                    cell = this.createCell();
-                    cell.hasPlayer(hasPlayer);
-                    cell.render(ctx);
+                    cell = this.createCell(column, row);
+                    cell.render(ctx, frame, players);
 
                     column += 1;
-                    hasPlayer = !hasPlayer; // temporary
 
                     this.newColumn();
                 }
 
-                hasPlayer = !hasPlayer;
                 column = 0;
                 row += 1;
 

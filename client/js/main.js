@@ -6,8 +6,16 @@
     function documentReady() {
         game = new Game($('#strategypy'));
 
+        $('.start-btn')
+            .on('click', startGame);
+
         $.getJSON('example.json')
-            .done(game.update.bind(game));
+            .done(game.initialize.bind(game));
+    }
+
+    function startGame(evt) {
+        var fps = $(evt.target).data('fps');
+        game.start(fps);
     }
 
     $(document)

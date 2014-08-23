@@ -1,12 +1,15 @@
 /* global: strategypy */
 (function ($) {
 
-    var c = 0;
+    var cellHeight = 0,
+        cellWidth = 0,
+        c = 0;
 
-    function Cell(x, y) {
+    function Cell(xId, yId, x, y) {
         this.cid = 'c' + c;
 
-        this.player = false;
+        this.xId = xId;
+        this.yId = yId;
 
         this.x = x;
         this.y = y;
@@ -14,12 +17,17 @@
         c += 1;
     }
 
-    Cell.WIDTH = 0;
-    Cell.HEIGHT = 0;
-
     Cell.setDimensions = function (width, height) {
-        Cell.WIDTH = width;
-        Cell.HEIGHT = height;
+        cellWidth = width;
+        cellHeight = height;
+    };
+
+    Cell.getWidth = function () {
+        return cellWidth;
+    };
+
+    Cell.getHeight = function () {
+        return cellHeight;
     };
 
     $.extend(Cell.prototype, {
@@ -28,15 +36,18 @@
             return this.cid;
         },
 
-        hasPlayer: function (hasPlayer) {
-            this.player = hasPlayer;
-        },
+        render: function (ctx, frame, players) {
+            var fillStyle = ctx.fillStyle,
+                i;
 
-        render: function (ctx) {
-            var fillStyle = ctx.fillStyle;
+            for (i in players) {
+                if (players[i].hasBotInPositionAtFrame(frame, this.xId, this.yId)) {
+                    ctx.fillStyle = players[i].color;
+                    break;
+                }
+            }
 
-            ctx.fillStyle = (this.player ? 'rgb(255, 0, 0)' : 'rgb(0, 0, 0)');
-            ctx.fillRect(this.x, this.y, Cell.WIDTH, Cell.HEIGHT);
+            ctx.fillRect(this.x, this.y, cellWidth, cellHeight);
             ctx.fillStyle = fillStyle;
         }
     });
