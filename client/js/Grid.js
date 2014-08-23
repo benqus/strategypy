@@ -19,22 +19,13 @@
             return cell;
         },
 
-        newColumn: function () {
-            this.currentX += Cell.getWidth();
-        },
-
-        newRow: function () {
-            this.currentX = 0;
-            this.currentY += Cell.getHeight();
-        },
-
-        update: function (ctx, frame, players) {
+        render: function (ctx, frame, players) {
             for (var i in this.cells) {
                 this.cells[i].render(ctx, frame, players);
             }
         },
 
-        render: function (ctx, frame, players) {
+        initialize: function () {
             var row = 0,
                 column = 0,
                 cell;
@@ -42,17 +33,18 @@
             while (row < this.rows) {
                 while (column < this.columns) {
                     cell = this.createCell(column, row);
-                    cell.render(ctx, frame, players);
-
                     column += 1;
 
-                    this.newColumn();
+                    // new column
+                    this.currentX += Cell.getWidth();
                 }
 
                 column = 0;
                 row += 1;
 
-                this.newRow();
+                // new row
+                this.currentX = 0;
+                this.currentY += Cell.getHeight();
             }
         }
     });
