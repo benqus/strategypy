@@ -1,23 +1,13 @@
-/* global: strategypy */
-(function ($, Game, GamePlayer) {
+/* global: jQuery, strategypy */
+(function ($, GamePlayer) {
 
     var gamePlayer;
 
     function documentReady() {
-        var game = new Game();
-
-        gamePlayer = new GamePlayer($('#strategypy'), game);
-
-        $('.start-btn')
-            .on('click', startGame);
+        gamePlayer = new GamePlayer($('#strategypy'));
 
         $.getJSON('example.json')
             .done(gamePlayer.initialize.bind(gamePlayer));
-    }
-
-    function startGame(evt) {
-        var fps = $(evt.target).data('fps');
-        gamePlayer.start(fps);
     }
 
     $(document)
@@ -25,6 +15,5 @@
 
 }(
     jQuery,
-    strategypy.Game,
     strategypy.GamePlayer
 ));

@@ -1,12 +1,12 @@
 /* global: jQuery, strategypy */
-(function ($) {
+(function ($, Game) {
 
     function GamePlayer($canvas, game) {
         this.fps = 30;
         this.isPlaying = false;
         this.frameCount = 0;
         this.currentFrame = 0;
-        this.game = game;
+        this.game = new Game();
         this.$canvas = $canvas;
     }
 
@@ -17,6 +17,8 @@
                 height = this.$canvas.height();
 
             this.frameCount = data.frames.length;
+
+            this.renderControls();
 
             this.game.initialize(data, width, height);
             this.game.renderFrame(this.getGameContext(), 0);
@@ -34,7 +36,37 @@
             this.game.renderFrame(context, this.currentFrame);
         },
 
-        start: function (fps) {
+        renderControls: function () {
+            var icon = (this.isPlaying ? 'pause' : 'play'),
+                text = (this.isPlaying ? 'Pause' : 'Play'),
+                html = [
+                    [
+                        '<button class="btn">',
+                            '<span class="fa fa-' + icon + '"></span>',
+                            '&nbsp;' + text,
+                        '</button>'
+                    ].join(''),
+                    '<button class="btn left" data-fps="15">15 FPS</button>',
+                    '<button class="btn right" data-fps="30">30 FPS</button>'
+                ].join('');
+
+            $('#game-player')
+                .html(html)
+                .on('click', function (evt) {
+                    var fps = $(evt.target).data('fps');
+                    this.play(fps);
+                }.bind(this));
+        },
+
+        resume: function () {
+            // TODO
+        },
+
+        pause: function () {
+            // TODO
+        },
+
+        play: function (fps) {
             var context = this.getGameContext();
 
             if (fps) {
@@ -55,11 +87,15 @@
                         this.currentFrame = 0;
 
                         console.log('Game finished!');
+
+                        this.renderControls();
                     } else {
                         // go to next frame
                         this.currentFrame += 1;
                     }
                 }.bind(this), 1000 / this.fps);
+
+                this.renderControls();
             }
         }
 
@@ -68,5 +104,6 @@
     strategypy.GamePlayer = GamePlayer;
 
 }(
-    jQuery
+    jQuery,
+    strategypy.Game
 ));
